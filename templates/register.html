@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block additional_css %}
+    <link rel="stylesheet" href="{{url_for('static', filename='css/register_page.css')}}">
+{% endblock %}
+
+{% include 'header.html' %}
+
+{% block content%}
+<div class="register-background-img">
+    <div class="container d-flex p-3 flex-column justify-content-center image-div-height">
+        <div class="mx-auto text-center cover-image-text">
+            <h1>Welcome to ToDo List.</h1>
+            <h3>ITS REGISTER TIME!</h3>
+        </div>
+    </div>
+</div>
+<div class="container">
+    {{wtf.quick_form(form, novalidate=True, button_map={'Register': 'btn submit-custom'}) }}
+</div>
+
+{% endblock%}

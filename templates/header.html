@@ -1,0 +1,36 @@
+<style>
+    .navbar-custom {
+        background-color: #00994d;
+    }
+
+    .navbar-custom .navbar-brand,
+    .navbar-custom .navbar-login {
+        color: white;
+        font-size: 25px;
+    }
+
+    .navbar-custom .navbar-text {
+      font-size: 20px;
+      color: white;
+    }
+
+</style>
+
+<nav class="navbar navbar-custom navbar-expand justify-content-between container-fluid px-3">
+
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <a class="navbar-brand" href="{{ url_for('cover_page')}}">
+      <img src="{{ url_for('static', filename='images/Navbar/img-list35.png')}}" alt="List Image">
+      <a class="navbar-brand" href="{{ url_for('cover_page')}}">ToDo List</a>
+    </a>
+
+    <ul class="navbar-nav ms-auto nav-size coffe-navbar-text">
+      <li class="nav-item">
+        <a class="nav-link navbar-text" aria-current="page" href="{{ url_for('login_page') }}">Login</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link navbar-text" aria-current="page" href="{{ url_for('register_page')}}">Register</a>
+      </li>
+    </ul>
+  </div>
+</nav>

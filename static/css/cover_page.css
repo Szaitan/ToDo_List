@@ -1,0 +1,53 @@
+body {
+    font-family: 'Alegreya Sans', serif;
+}
+
+h3 {
+    font-family: 'Alegreya', serif;
+    font-size: 30px;
+}
+
+p {
+    font-family: 'Alegreya', serif;
+    font-size: 20px;
+}
+
+.cover-page-image {
+    background-image: url('/static/images/Cover/cover-page-image.jpeg');
+    background-size: cover;
+    background-position: center center;
+    }
+
+.cover-image-text {
+    color: white;
+    margin-bottom: 0px;
+    padding-top: 0px;
+}
+
+.coffe-shop-image-button {
+    margin-top: 130px;
+}
+
+.coffe-navbar-text {
+    color: white;
+    font-size: 20px;
+}
+
+.image-div-height {
+    height: 600px;
+}
+
+.three-features-center {
+    text-align: center;
+}
+
+.button-color {
+    background-color: #00e673;
+    margin: 90px 20px 0px;
+    padding: 0px 50px 0px;
+}
+
+.button-color:hover {
+    background-color: #008042;
+    color: white;
+}

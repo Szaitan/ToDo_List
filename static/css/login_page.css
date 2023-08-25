@@ -1,0 +1,36 @@
+body {
+    font-family: 'Alegreya Sans', serif;
+}
+
+h3 {
+    font-family: 'Alegreya', serif;
+    font-size: 30px;
+}
+
+p {
+    font-family: 'Alegreya', serif;
+    font-size: 20px;
+}
+
+.control-label {
+    margin: 10px 0;
+}
+
+.login-background-img {
+    background-image: url('/static/images/Login/login-image.png');
+    background-size: cover;
+    background-position: center center;
+}
+
+.submit-custom {
+    background-color: #00e673;
+    margin: 10px 0;
+}
+
+.submit-custom:hover {
+    background-color: #33ff99;
+}
+.container {
+    height: 35vh;
+}
+
