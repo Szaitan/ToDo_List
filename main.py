@@ -32,6 +32,10 @@ def register_page():
     return render_template('register.html', form=form)
 
 
+@app.route('/todo-list')
+def todo_page():
+    return render_template('todo.html')
+
+
 if __name__ == '__main__':
     app.run(debug=True)
-

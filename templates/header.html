@@ -1,6 +1,9 @@
 <style>
     .navbar-custom {
         background-color: #00994d;
+        border-style: outset;
+        border-width: 1px;
+        border-color: green;
     }
 
     .navbar-custom .navbar-brand,
@@ -25,6 +28,9 @@
     </a>
 
     <ul class="navbar-nav ms-auto nav-size coffe-navbar-text">
+      <li class="nav-item">
+        <a class="nav-link navbar-text" aria-current="page" href="{{ url_for('todo_page')}}">Lists</a>
+      </li>
       <li class="nav-item">
         <a class="nav-link navbar-text" aria-current="page" href="{{ url_for('login_page') }}">Login</a>
       </li>

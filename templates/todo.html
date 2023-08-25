@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block additional_css %}
+    <link rel="stylesheet" href="{{url_for('static', filename='css/todo_page.css')}}">
+{% endblock %}
+
+{% include 'header.html' %}
+
+{% block content%}
+
+<div class="sidebar-container">
+    <div class="d-flex flex-column flex-shrink-0 sidebar text-center">
+        <h4>Lists:</h4>
+        <a href="">Testasfcasdacacacac</a>
+        <a href="">Test</a>
+        <a href="">Test</a>
+        <a href="">Test</a>
+        <a href="">Test</a>
+    </div>
+    <div>
+        <h1>TEST</h1>
+    </div>
+</div>
+
+{% endblock%}
