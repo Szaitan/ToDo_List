@@ -28,15 +28,21 @@
     </a>
 
     <ul class="navbar-nav ms-auto nav-size coffe-navbar-text">
+      {% if current_user.is_active %}
       <li class="nav-item">
         <a class="nav-link navbar-text" aria-current="page" href="{{ url_for('todo_page')}}">Lists</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link navbar-text" aria-current="page" href="{{ url_for('logout_page')}}">Logout</a>
+      </li>
+      {% else: %}
       <li class="nav-item">
         <a class="nav-link navbar-text" aria-current="page" href="{{ url_for('login_page') }}">Login</a>
       </li>
       <li class="nav-item">
         <a class="nav-link navbar-text" aria-current="page" href="{{ url_for('register_page')}}">Register</a>
       </li>
+      {% endif %}
     </ul>
   </div>
 </nav>
