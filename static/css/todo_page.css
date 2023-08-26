@@ -41,3 +41,22 @@ p {
 
 }
 
+.add-list-custom {
+    background-color: #00e673;
+    margin: 8px 0 0;
+    padding: 3px 48px;
+
+}
+
+.add-list-custom:hover {
+    background-color: #33ff99;
+}
+
+hr {
+color: black;
+height: 2px;
+margin: 4px 0px;
+border-style: solid;
+border-width: thin;
+}
+

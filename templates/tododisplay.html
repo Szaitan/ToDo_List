@@ -20,6 +20,15 @@
             <a href="{{ url_for('todo_page_display', list_id=data.id) }}">{{ data.name }}</a>
         {% endfor %}
     </div>
+    <div class="container">
+        {{ wtf.quick_form(content_form, novalidate=True) }}
+        <div>
+            {%  for content in content_of_list: %}
+            <h1>{{content.content}}</h1>
+            {% endfor %}
+        </div>
+    </div>
 </div>
+
 
 {% endblock%}

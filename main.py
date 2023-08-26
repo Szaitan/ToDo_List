@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_bootstrap import Bootstrap
-from forms import CreateRegisterForm, CreateLoginForm
+from forms import CreateRegisterForm, CreateLoginForm, CreateAddListForm, CreateContentListForm
 from flask_login import LoginManager, UserMixin, login_user, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 import email_validator
@@ -14,7 +14,6 @@ import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('flask_secret_key')
-
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todolist.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 Bootstrap(app)
@@ -107,9 +106,45 @@ def register_page():
     return render_template('register.html', form=form)
 
 
-@app.route('/todo-list')
+@app.route('/todo-list', methods=['GET', 'POST'])
 def todo_page():
-    return render_template('todo.html')
+    list_with_lists = db.session.query(ToDoList).filter_by(lists_user_id=current_user.id).all()
+
+    add_list_form = CreateAddListForm()
+    content_of_list_form = CreateContentListForm()
+
+    if add_list_form.validate_on_submit():
+        new_list_to_add = ToDoList(name=add_list_form.name.data, lists_user_id=current_user.id)
+        db.session.add(new_list_to_add)
+        db.session.commit()
+        return redirect(url_for('todo_page'))
+    return render_template('todo.html', lists_data=list_with_lists, form=add_list_form,
+                           content_form=content_of_list_form)
+
+
+@app.route('/todo-list-display/<int:list_id>', methods=['GET', 'POST'])
+def todo_page_display(list_id):
+    list_with_lists = db.session.query(ToDoList).filter_by(lists_user_id=current_user.id).all()
+    content_of_list = db.session.query(ListContent).filter_by(content_to_do_list_id=list_id).all()
+
+    add_list_form = CreateAddListForm()
+    content_of_list_form = CreateContentListForm()
+
+    if content_of_list_form.validate_on_submit():
+        new_content_of_list = ListContent(content=content_of_list_form.content.data, content_to_do_list_id=list_id)
+        db.session.add(new_content_of_list)
+        db.session.commit()
+        return redirect(url_for('todo_page_display', list_id=list_id))
+
+    if add_list_form.validate_on_submit():
+        new_list_to_add = ToDoList(name=add_list_form.name.data, lists_user_id=current_user.id)
+        db.session.add(new_list_to_add)
+        db.session.commit()
+        return redirect(url_for('todo_page_display', list_id=list_id))
+
+    return render_template('tododisplay.html', lists_data=list_with_lists, content_of_list=content_of_list,
+                           form=add_list_form,
+                           content_form=content_of_list_form)
 
 
 if __name__ == '__main__':
