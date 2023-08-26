@@ -10,6 +10,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from flask_sqlalchemy import SQLAlchemy
 from typing import List
 import os
+from sqlalchemy.orm.exc import NoResultFound
 
 
 app = Flask(__name__)
@@ -128,13 +129,24 @@ def todo_page():
 
 @app.route('/todo-list-display/<int:list_id>', methods=['GET', 'POST'])
 def todo_page_display(list_id):
-    list_with_lists = db.session.query(ToDoList).filter_by(lists_user_id=current_user.id).all()
-    content_of_list = db.session.query(ListContent).filter_by(content_to_do_list_id=list_id).all()
-    list_to_check = db.session.query(ToDoList).filter_by(id=list_id).first()
+    # list_with_lists = db.session.query(ToDoList).filter_by(lists_user_id=current_user.id).all()
+    # content_of_list = db.session.query(ListContent).filter_by(content_to_do_list_id=list_id).all()
+    # list_to_check = db.session.query(ToDoList).filter_by(id=list_id).first()
 
     try:
-        if current_user.id == list_to_check.lists_user_id:
-            print('test')
+        list_to_check = db.session.query(ToDoList).filter_by(id=list_id).first()
+        list_id_to_check = list_to_check.lists_user_id
+    except AttributeError:
+        return abort(403)
+    except TypeError:
+        return abort(403)
+    else:
+        print('test1')
+        if current_user.id == list_id_to_check:
+            print('test2')
+            list_with_lists = db.session.query(ToDoList).filter_by(lists_user_id=current_user.id).all()
+            content_of_list = db.session.query(ListContent).filter_by(content_to_do_list_id=list_id).all()
+
             add_list_form = CreateAddListForm()
             content_of_list_form = CreateContentListForm()
 
@@ -154,8 +166,8 @@ def todo_page_display(list_id):
             return render_template('tododisplay.html', lists_data=list_with_lists, content_of_list=content_of_list,
                                    form=add_list_form,
                                    content_form=content_of_list_form)
-    except AttributeError:
-        return abort(403)
+        else:
+            return abort(403)
 
 
 if __name__ == '__main__':
