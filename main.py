@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, abort
 from flask_bootstrap import Bootstrap
 from forms import CreateRegisterForm, CreateLoginForm, CreateAddListForm, CreateContentListForm
 from flask_login import LoginManager, UserMixin, login_user, current_user, logout_user
@@ -32,6 +32,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String)
 
     user_lists: Mapped[List['ToDoList']] = relationship(back_populates='lists_user')
+    user_list_content: Mapped[List['ListContent']] = relationship(back_populates='list_content_user')
 
 
 class ToDoList(db.Model):
@@ -52,6 +53,9 @@ class ListContent(db.Model):
 
     content_to_do_list_id: Mapped[int] = mapped_column(ForeignKey('to_do_lists.id'))
     content_to_do_list: Mapped['ToDoList'] = relationship(back_populates='to_do_list_content')
+
+    list_content_user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+    list_content_user: Mapped['User'] = relationship(back_populates='user_list_content')
 
 
 @login_manager.user_loader
@@ -126,25 +130,32 @@ def todo_page():
 def todo_page_display(list_id):
     list_with_lists = db.session.query(ToDoList).filter_by(lists_user_id=current_user.id).all()
     content_of_list = db.session.query(ListContent).filter_by(content_to_do_list_id=list_id).all()
+    list_to_check = db.session.query(ToDoList).filter_by(id=list_id).first()
 
-    add_list_form = CreateAddListForm()
-    content_of_list_form = CreateContentListForm()
+    try:
+        if current_user.id == list_to_check.lists_user_id:
+            print('test')
+            add_list_form = CreateAddListForm()
+            content_of_list_form = CreateContentListForm()
 
-    if content_of_list_form.validate_on_submit():
-        new_content_of_list = ListContent(content=content_of_list_form.content.data, content_to_do_list_id=list_id)
-        db.session.add(new_content_of_list)
-        db.session.commit()
-        return redirect(url_for('todo_page_display', list_id=list_id))
+            if content_of_list_form.validate_on_submit():
+                new_content_of_list = ListContent(content=content_of_list_form.content.data, content_to_do_list_id=list_id,
+                                                  list_content_user_id=current_user.id)
+                db.session.add(new_content_of_list)
+                db.session.commit()
+                return redirect(url_for('todo_page_display', list_id=list_id))
 
-    if add_list_form.validate_on_submit():
-        new_list_to_add = ToDoList(name=add_list_form.name.data, lists_user_id=current_user.id)
-        db.session.add(new_list_to_add)
-        db.session.commit()
-        return redirect(url_for('todo_page_display', list_id=list_id))
+            if add_list_form.validate_on_submit():
+                new_list_to_add = ToDoList(name=add_list_form.name.data, lists_user_id=current_user.id)
+                db.session.add(new_list_to_add)
+                db.session.commit()
+                return redirect(url_for('todo_page_display', list_id=list_id))
 
-    return render_template('tododisplay.html', lists_data=list_with_lists, content_of_list=content_of_list,
-                           form=add_list_form,
-                           content_form=content_of_list_form)
+            return render_template('tododisplay.html', lists_data=list_with_lists, content_of_list=content_of_list,
+                                   form=add_list_form,
+                                   content_form=content_of_list_form)
+    except AttributeError:
+        return abort(403)
 
 
 if __name__ == '__main__':
