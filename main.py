@@ -129,10 +129,6 @@ def todo_page():
 
 @app.route('/todo-list-display/<int:list_id>', methods=['GET', 'POST'])
 def todo_page_display(list_id):
-    # list_with_lists = db.session.query(ToDoList).filter_by(lists_user_id=current_user.id).all()
-    # content_of_list = db.session.query(ListContent).filter_by(content_to_do_list_id=list_id).all()
-    # list_to_check = db.session.query(ToDoList).filter_by(id=list_id).first()
-
     try:
         list_to_check = db.session.query(ToDoList).filter_by(id=list_id).first()
         list_id_to_check = list_to_check.lists_user_id
@@ -141,9 +137,7 @@ def todo_page_display(list_id):
     except TypeError:
         return abort(403)
     else:
-        print('test1')
         if current_user.id == list_id_to_check:
-            print('test2')
             list_with_lists = db.session.query(ToDoList).filter_by(lists_user_id=current_user.id).all()
             content_of_list = db.session.query(ListContent).filter_by(content_to_do_list_id=list_id).all()
 
@@ -164,10 +158,18 @@ def todo_page_display(list_id):
                 return redirect(url_for('todo_page_display', list_id=list_id))
 
             return render_template('tododisplay.html', lists_data=list_with_lists, content_of_list=content_of_list,
-                                   form=add_list_form,
+                                   form=add_list_form, list_id=list_id,
                                    content_form=content_of_list_form)
         else:
             return abort(403)
+
+
+@app.route('/delete/<int:content_id>', methods=["GET", "POST"])
+def delete_list_content(content_id):
+    content_to_delete = db.session.query(ListContent).filter_by(id=content_id).first()
+    db.session.delete(content_to_delete)
+    db.session.commit()
+    return redirect(url_for('todo_page_display', list_id=request.args.get('list_id')))
 
 
 if __name__ == '__main__':

@@ -17,7 +17,7 @@
         <hr>
         <h4>Lists:</h4>
         {% for data in lists_data: %}
-            <a href="{{ url_for('todo_page_display', list_id=data.id) }}">{{ data.name }}</a>
+            <a class="lists" href="{{ url_for('todo_page_display', list_id=data.id) }}">{{ data.name }}</a>
         {% endfor %}
     </div>
 </div>

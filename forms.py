@@ -17,11 +17,11 @@ class CreateLoginForm(FlaskForm):
 
 
 class CreateAddListForm(FlaskForm):
-    name = StringField(name="List Name To Add:", validators=[DataRequired()])
+    name = StringField(name="Create new list:", validators=[DataRequired()])
     submit = SubmitField(name="Add", render_kw={'class': 'add-list-custom'})
 
 
 class CreateContentListForm(FlaskForm):
-    content = StringField(name="Content to add:", validators=[DataRequired()])
-    submit = SubmitField(name="Add", render_kw={'class': 'add-list-custom'})
+    content = StringField(name="Add task to your list:", validators=[DataRequired()])
+    submit = SubmitField(name="Add", render_kw={'class': 'add-task-custom'})
 

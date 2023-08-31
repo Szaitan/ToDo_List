@@ -52,12 +52,34 @@ p {
     background-color: #33ff99;
 }
 
+.add-task-custom {
+    background-color: #00e673;
+    margin: 8px 0 0;
+    padding: 3px 48px;
+}
+
+.add-task-custom:hover {
+    background-color: #33ff99;
+}
+
+
 hr {
-color: black;
-height: 2px;
-margin: 4px 0px;
-border-style: solid;
-border-width: thin;
+    color: black;
+    height: 2px;
+    margin: 4px 0px;
+    border-style: solid;
+    border-width: thin;
+}
+
+.list-mainbox-content {
+    margin: 1vh;
+    width: 1000vh;
+    background-color: #e6fff3;
+    padding: 5px;
+}
+
+.delete-box {
+    width: 4vh;
 }
 
 .lists {
