@@ -75,7 +75,7 @@ def login_page():
     if form.validate_on_submit():
         user_to_check = db.session.query(User).filter_by(email=form.e_mail.data).first()
         if user_to_check is not None:
-            if user_to_check.password == form.password.data:
+            if check_password_hash(user_to_check.password, form.password.data):
                 login_user(user_to_check)
                 return redirect(url_for('todo_page'))
             else:
@@ -99,7 +99,8 @@ def register_page():
     if form.validate_on_submit():
         if db.session.query(User).filter_by(email=form.e_mail.data).first() is None:
             # noinspection PyArgumentList
-            user_to_add = User(login=form.login.data, email=form.e_mail.data, password=form.password.data)
+            user_to_add = User(login=form.login.data, email=form.e_mail.data,
+                               password=generate_password_hash(form.password.data, salt_length=8))
             db.session.add(user_to_add)
             db.session.commit()
             login_user(user_to_add)
@@ -210,4 +211,4 @@ def delete_list():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000)

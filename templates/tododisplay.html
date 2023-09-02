@@ -35,8 +35,6 @@
                 <tbody>
                 {%  for content in content_of_list: %}
                     <tr>
-                        {{ content.id }}
-                        {{ list_id }}
                         <th class="delete-box"><a href="{{ url_for('delete_list_content', content_id=content.id, list_id=list_id) }}">✔</a></th>
                         <th>{{content.content}}</th>
                     </tr>
