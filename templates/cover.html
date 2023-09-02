@@ -15,8 +15,12 @@
             <h3>Create and modify your ToDo list whenever and however you want</h3>
         </div>
         <div class="mx-auto text-center">
+            {% if current_user.is_active: %}
+            <h1 class="cover-image-text2">Welcome Back {{current_user.login}}</h1>
+            {% else: %}
             <a class="btn btn-lg button-color" href="{{ url_for('login_page')}}">Login</a>
             <a class="btn btn-lg button-color" href="{{ url_for('register_page')}}">Register</a>
+            {% endif %}
         </div>
     </div>
 </div>
