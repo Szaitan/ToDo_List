@@ -4,13 +4,12 @@ from forms import CreateRegisterForm, CreateLoginForm, CreateAddListForm, Create
 from flask_login import LoginManager, UserMixin, login_user, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 import email_validator
-import datetime
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from flask_sqlalchemy import SQLAlchemy
 from typing import List
 import os
-from sqlalchemy.orm.exc import NoResultFound
+from functools import wraps
 
 
 app = Flask(__name__)
@@ -164,12 +163,50 @@ def todo_page_display(list_id):
             return abort(403)
 
 
-@app.route('/delete/<int:content_id>', methods=["GET", "POST"])
-def delete_list_content(content_id):
-    content_to_delete = db.session.query(ListContent).filter_by(id=content_id).first()
+def user_only(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        content_id = request.args.get('content_id')
+        list_id = request.args.get('list_id')
+        # print(request.args.get('content_id'))
+        print(request.args.get('list_id'))
+
+        content_to_delete = db.session.query(ListContent).filter_by(id=content_id).first()
+        list_to_delete = db.session.query(ToDoList).filter_by(id=list_id).first()
+        # print(content_to_delete.list_content_user_id)
+        print(list_to_delete.lists_user_id)
+        if list_to_delete.lists_user_id == current_user.id:
+            return f(*args, **kwargs)
+        elif content_to_delete.list_content_user_id == current_user.id:
+            return f(*args, **kwargs)
+        else:
+            return abort(403)
+
+    return decorated_function
+
+
+@app.route('/delete', methods=["GET", "POST"])
+@user_only
+def delete_list_content():
+    content_to_delete = db.session.query(ListContent).filter_by(id=request.args.get('content_id')).first()
     db.session.delete(content_to_delete)
     db.session.commit()
     return redirect(url_for('todo_page_display', list_id=request.args.get('list_id')))
+
+
+@app.route('/delete_list', methods=['GET', 'POST'])
+@user_only
+def delete_list():
+    list_id = request.args.get('list_id')
+    list_to_delete = db.session.query(ToDoList).filter_by(id=list_id).first()
+    contents_to_delete = db.session.query(ListContent).filter_by(content_to_do_list_id=list_id).all()
+    for content in contents_to_delete:
+        db.session.delete(content)
+        db.session.commit()
+    db.session.delete(list_to_delete)
+    db.session.commit()
+
+    return redirect(url_for('todo_page'))
 
 
 if __name__ == '__main__':

@@ -16,9 +16,14 @@
         </div>
         <hr>
         <h4>Lists:</h4>
-        {% for data in lists_data: %}
-            <a class="lists" href="{{ url_for('todo_page_display', list_id=data.id) }}">{{ data.name }}</a>
-        {% endfor %}
+        <table>
+            {% for data in lists_data: %}
+            <tr class="px-3">
+                    <th><a class="lists px-2" href="{{ url_for('todo_page_display', list_id=data.id) }}">{{ data.name }}</a></th>
+                    <th><a class="lists px-1" href="{{ url_for('delete_list', list_id=data.id)}}">✗</a></th>
+            </tr>
+            {% endfor %}
+        </table>
     </div>
     <div class="list-mainbox-content">
         <div>
@@ -30,7 +35,9 @@
                 <tbody>
                 {%  for content in content_of_list: %}
                     <tr>
-                        <th class="delete-box"><a href="{{ url_for('delete_list_content', content_id=content.id, list_id=list_id) }}">✘</a></th>
+                        {{ content.id }}
+                        {{ list_id }}
+                        <th class="delete-box"><a href="{{ url_for('delete_list_content', content_id=content.id, list_id=list_id) }}">✔</a></th>
                         <th>{{content.content}}</th>
                     </tr>
                 {% endfor %}

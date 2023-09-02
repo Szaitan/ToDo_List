@@ -86,3 +86,7 @@ hr {
     color: white;
     text-decoration: none;
 }
+
+.centered-table table {
+    margin: 0 auto; /* Center-align the table within its parent div */
+}
